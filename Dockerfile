@@ -4,21 +4,21 @@ FROM library/centos:7
 MAINTAINER Jorge Ramirez "jorgeramirez1990@gmail.com"
 
 RUN yum -y update
-RUN yum -y install wget deltarpm
+RUN yum -y install wget deltarpm bzip2
 # download latest release
-RUN wget http://files.postgres-xl.org/postgres-xl-9.5r1.1.tar.gz
-RUN tar xzvf postgres-xl-9.5r1.1.tar.gz
-ENV DIR postgres-xl-9.5r1.1
-WORKDIR ${DIR}
+RUN wget https://www.postgres-xl.org/downloads/postgres-xl-9.5r1.6.tar.bz2
+RUN tar -jxvf postgres-xl-9.5r1.6.tar.bz2
+WORKDIR postgres-xl-9.5r1.6
 
 RUN yum group install -y "Development Tools"
-RUN yum install -y readline-devel
-RUN yum install -y zlib-devel
+RUN yum install -y readline-devel zlib-devel libuuid uuid-devel
 
-RUN ./configure
+RUN ./configure --with-ossp-uuid
 RUN make
 USER root
 
+RUN make install
+WORKDIR contrib
 RUN make install
 
 # Setup one coordinator, two data nodes and one GTM
@@ -61,6 +61,7 @@ EXPOSE 5432
 RUN echo "listen_addresses='*'" >> /usr/local/pgsql/data_coord1/postgresql.conf
 RUN echo "host all  all    0.0.0.0/0  trust" >> /usr/local/pgsql/data_coord1/pg_hba.conf
 
+ADD init.sql /pgxl-initdb.d/
 User root
 
 RUN echo root:admin | chpasswd

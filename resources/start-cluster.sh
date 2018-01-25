@@ -38,7 +38,7 @@ echo "setup done!"
 
 for f in /pgxl-initdb.d/*; do
   case "$f" in
-    *.sql)    echo "$0: running $f"; echo "exit" | psql -f "$f"; echo ;;
+    *.sql)    echo "$0: running $f"; echo "exit" | /usr/local/pgsql/bin/psql -f "$f"; echo ;;
     *)        echo "$0: ignoring $f" ;;
   esac
   echo
