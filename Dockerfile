@@ -26,6 +26,7 @@ RUN adduser postgres
 RUN mkdir /usr/local/pgsql/data_coord1
 RUN mkdir /usr/local/pgsql/data_datanode_1
 RUN mkdir /usr/local/pgsql/data_datanode_2
+RUN mkdir /usr/local/pgsql/data_datanode_3
 RUN mkdir /usr/local/pgsql/data_gtm
 
 ADD resources/start-cluster.sh /usr/bin/start-cluster.sh
@@ -35,6 +36,7 @@ ADD resources/test-db.sql /home/postgres/test-db.sql
 RUN chown postgres /usr/local/pgsql/data_coord1
 RUN chown postgres /usr/local/pgsql/data_datanode_1
 RUN chown postgres /usr/local/pgsql/data_datanode_2
+RUN chown postgres /usr/local/pgsql/data_datanode_3
 RUN chown postgres /usr/local/pgsql/data_gtm
 RUN chown postgres /usr/bin/start-cluster.sh
 
@@ -53,6 +55,7 @@ USER postgres
 RUN /usr/local/pgsql/bin/initdb -D /usr/local/pgsql/data_coord1 --nodename coord1
 RUN /usr/local/pgsql/bin/initdb -D /usr/local/pgsql/data_datanode_1 --nodename datanode_1
 RUN /usr/local/pgsql/bin/initdb -D /usr/local/pgsql/data_datanode_2 --nodename datanode_2
+RUN /usr/local/pgsql/bin/initdb -D /usr/local/pgsql/data_datanode_3 --nodename datanode_3
 RUN /usr/local/pgsql/bin/initgtm -D /usr/local/pgsql/data_gtm -Z gtm
 RUN echo "export PATH=$PATH:/usr/local/pgsql/bin" >> /home/postgres/.bashrc
 
